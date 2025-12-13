@@ -1,5 +1,4 @@
 version: '3.9'
-
 services:
   postgres:
     container_name: pg-ru
@@ -14,3 +13,18 @@ services:
       - "5432:5432"
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  pinger:
+    build:
+      context: ./pinger-app
+      dockerfile: Dockerfile
+    image: postgres-pinger:0.1
+    container_name: pinger
+    depends_on:
+      - postgres
+    env_file:
+      - ./pinger-app/.env.pinger   # pass the env file path (REQ 1.11)
+    volumes:
+      - ./pinger-logs:/var/log     # mount host folder to container /var/log for LOG_DUPLICATE_PATH demo
+    restart: unless-stopped
+

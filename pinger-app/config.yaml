@@ -1,0 +1,6 @@
+# pinger-app/config.yaml
+# Connection parameters (no password here).
+# IMPORTANT: use 'postgres' as host so the pinger container resolves postgres service in compose network.
+host: postgres
+port: 5432
+database: postgres
