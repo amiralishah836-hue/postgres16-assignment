@@ -1,3 +1,15 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
+
+# Environment files (SECURITY)
+.env
+.env.*
+*.env
+pinger-app/.env.pinger
+
+# Logs
+*.log
+pinger-logs/
+
