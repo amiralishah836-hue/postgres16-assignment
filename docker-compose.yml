@@ -1,5 +1,7 @@
 version: '3.9'
+
 services:
+
   postgres:
     container_name: pg-ru
     build:
@@ -13,6 +15,8 @@ services:
       - "5432:5432"
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
 
   pinger:
     build:
@@ -23,8 +27,23 @@ services:
     depends_on:
       - postgres
     env_file:
-      - ./pinger-app/.env.pinger   # pass the env file path (REQ 1.11)
+      - ./pinger-app/.env.pinger
     volumes:
-      - ./pinger-logs:/var/log     # mount host folder to container /var/log for LOG_DUPLICATE_PATH demo
+      - ./pinger-logs:/var/log
     restart: unless-stopped
 
+
+  sdl-app:
+    build:
+      context: ./sdl-app
+      dockerfile: Dockerfile
+    container_name: sdl-app
+    depends_on:
+      - postgres
+    environment:
+      LOG_DUPLICATE_PATH: /logs/sdl.log
+    volumes:
+      - ./sdl-logs:/logs
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
